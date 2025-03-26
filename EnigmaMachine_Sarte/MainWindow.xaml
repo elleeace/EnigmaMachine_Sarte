@@ -11,7 +11,7 @@
         Background="#181717">
     <Window.Resources>
         <!-- Dark Mode Colors -->
-        <SolidColorBrush x:Key="DarkBackground" Color="#181717"/>
+        <SolidColorBrush x:Key="DarkBackground" Color="Gray"/>
         <SolidColorBrush x:Key="DarkForeground" Color="White"/>
         <SolidColorBrush x:Key="DarkBorder" Color="#444"/>
         <SolidColorBrush x:Key="DarkControlBackground" Color="#2D2D2D"/>
@@ -432,7 +432,7 @@
             <!-- Settings -->
             <GroupBox Grid.Row="0" Header="Machine Settings" Margin="0,0,0,10">
                 <StackPanel>
-                    <CheckBox x:Name="chkRotorOn" Content="Rotor Enabled" IsChecked="True" Margin="5"/>
+                    <CheckBox x:Name="chkRotorOn" Content="Rotor Enabled" IsChecked="True" Margin="5" Checked="chkRotorOn_Checked_1"/>
                     <Button x:Name="btnReset" Content="Reset All" Margin="5" Click="btnReset_Click"
                             Style="{StaticResource ResetButtonStyle}" Width="82"/>
                 </StackPanel>

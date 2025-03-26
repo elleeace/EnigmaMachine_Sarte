@@ -32,9 +32,9 @@ namespace EnigmaMachine_Sarte
             InitializeComponent();
             InitializePlugboardComboBoxes();
             SetDefaults();
-            _rotor = true;
+            _rotor = false;
             chkRotorOn.IsChecked = false;
-            chkRotorOn.IsEnabled = false; // Disable rotor checkbox until plugboard is set
+            chkRotorOn.IsEnabled = true; // Disable rotor checkbox until plugboard is set
         }
 
         private void InitializePlugboardComboBoxes()
@@ -149,10 +149,9 @@ namespace EnigmaMachine_Sarte
 
         private async void HighlightKey(char key)
         {
-            // Reset all key backgrounds first
+           
             ResetKeyColors();
 
-            // Find and highlight the pressed key
             foreach (var child in keyboardPanel.Children)
             {
                 if (child is StackPanel row)
@@ -168,16 +167,14 @@ namespace EnigmaMachine_Sarte
                 }
             }
 
-            // Clear the highlight after 300ms
             await System.Threading.Tasks.Task.Delay(300);
             ResetKeyColors();
         }
         private async void HighlightLight(char light)
         {
-            // Reset all light backgrounds first
+            
             ResetLightColors();
 
-            // Find and highlight the corresponding light
             foreach (var child in lightboardPanel.Children)
             {
                 if (child is StackPanel row)
@@ -193,7 +190,6 @@ namespace EnigmaMachine_Sarte
                 }
             }
 
-            // Clear the highlight after 300ms
             await System.Threading.Tasks.Task.Delay(300);
             ResetLightColors();
         }
@@ -213,7 +209,6 @@ namespace EnigmaMachine_Sarte
                 char mirroredChar = Mirror(inputChar);
                 txtMirrored.Text += mirroredChar;
 
-                // Highlight the pressed key and corresponding light
                 HighlightKey(inputChar);
                 HighlightLight(encryptedChar);
 
@@ -231,7 +226,7 @@ namespace EnigmaMachine_Sarte
             txtRotor2Pos.Text = _keyOffset[1].ToString();
             txtRotor3Pos.Text = _keyOffset[2].ToString();
 
-            // Show the actual character at the current position for each rotor
+       
             lblRotor1Current.Content = "Current: " + _ring1[_keyOffset[0]];
             lblRotor2Current.Content = "Current: " + _ring2[_keyOffset[1]];
             lblRotor3Current.Content = "Current: " + _ring3[_keyOffset[2]];
@@ -241,7 +236,6 @@ namespace EnigmaMachine_Sarte
         {
             char newChar = letter;
 
-            // Plugboard pass (before rotors) - only if plugboard has connections
             if (_plugboard.Count > 0)
             {
                 if (_plugboard.ContainsKey(newChar))
@@ -416,11 +410,11 @@ namespace EnigmaMachine_Sarte
 
             if (forward)
             {
-                // Always rotate the fast rotor (Rotor 1) first
+               
                 _keyOffset[0] = (_keyOffset[0] + 1) % _control.Length;
                 _ring1 = MoveValues(true, _ring1);
 
-                // Check if we hit the notch position (26th position, index 25)
+              
                 if (_keyOffset[0] == 25) // Notch position for Rotor 1
                 {
                     // Rotate the medium rotor (Rotor 2)
@@ -729,10 +723,7 @@ namespace EnigmaMachine_Sarte
             }
         }
 
-        private void chkRotorOn_Checked(object sender, RoutedEventArgs e)
-        {
-            _rotor = chkRotorOn.IsChecked == true;
-        }
+     
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
@@ -740,7 +731,8 @@ namespace EnigmaMachine_Sarte
             _plugboard.Clear();
             _plugboardSet = false;
             chkRotorOn.IsChecked = false;
-            chkRotorOn.IsEnabled = false;
+            chkRotorOn.IsEnabled = true;
+            _rotor = false;
 
             // Clear and reinitialize the plugboard UI
             plugboardConnections.Items.Clear();
@@ -753,6 +745,10 @@ namespace EnigmaMachine_Sarte
             }
         }
 
-
+        private void chkRotorOn_Checked_1(object sender, RoutedEventArgs e)
+        {
+            _rotor = chkRotorOn.IsChecked == true;
+            chkRotorOn.IsEnabled = false;
+        }
     }
 }
