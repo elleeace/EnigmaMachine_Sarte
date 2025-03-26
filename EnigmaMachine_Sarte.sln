@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnigmaMachine_Sarte", "EnigmaMachine_Sarte\EnigmaMachine_Sarte.csproj", "{2F4C076A-AAF6-490B-B62E-391F07499911}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F4C076A-AAF6-490B-B62E-391F07499911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F4C076A-AAF6-490B-B62E-391F07499911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F4C076A-AAF6-490B-B62E-391F07499911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F4C076A-AAF6-490B-B62E-391F07499911}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E5C7D40-0B41-4AAC-AB79-5D90368A2D2C}
+	EndGlobalSection
+EndGlobal

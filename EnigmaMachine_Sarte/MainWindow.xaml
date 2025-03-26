@@ -1,0 +1,457 @@
+﻿<Window x:Class="EnigmaMachine_Sarte.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EnigmaMachine_Sarte"
+        mc:Ignorable="d"
+        Title="Enigma Machine" Height="750" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        PreviewKeyUp="Window_PreviewKeyUp"
+        Background="#181717">
+    <Window.Resources>
+        <!-- Dark Mode Colors -->
+        <SolidColorBrush x:Key="DarkBackground" Color="#181717"/>
+        <SolidColorBrush x:Key="DarkForeground" Color="White"/>
+        <SolidColorBrush x:Key="DarkBorder" Color="#444"/>
+        <SolidColorBrush x:Key="DarkControlBackground" Color="#2D2D2D"/>
+        <SolidColorBrush x:Key="DarkHighlight" Color="#444"/>
+        <SolidColorBrush x:Key="GoldHighlight" Color="Gold"/>
+
+        <!-- Base Styles -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+        </Style>
+
+        <!-- Key Button Style -->
+        <Style x:Key="KeyButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="45"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{StaticResource GoldHighlight}"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Light Label Style -->
+        <Style x:Key="LightLabelStyle" TargetType="Label">
+            <Setter Property="Width" Value="45"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Label">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Rotor Border Style -->
+        <Style x:Key="RotorBorderStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+
+        <!-- Message Box Style -->
+        <Style x:Key="MessageBoxStyle" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Courier New"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="MinHeight" Value="120"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Rotor Position Box -->
+        <Style x:Key="RotorPositionBox" TargetType="TextBox">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Rotor Arrow Button -->
+        <Style x:Key="RotorArrowButton" TargetType="Button">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Plugboard Pair Button -->
+        <Style x:Key="PlugboardPairButton" TargetType="Button" BasedOn="{StaticResource RotorArrowButton}">
+            <Setter Property="Width" Value="25"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+        </Style>
+
+        <!-- Plugboard Pair Label -->
+        <Style x:Key="PlugboardPairLabel" TargetType="Label">
+            <Setter Property="Width" Value="25"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForeground}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Label">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Add Button -->
+        <Style x:Key="AddButtonStyle" TargetType="Button" BasedOn="{StaticResource RotorArrowButton}">
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+
+        <!-- Reset Button -->
+        <Style x:Key="ResetButtonStyle" TargetType="Button" BasedOn="{StaticResource RotorArrowButton}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        
+        
+    </Window.Resources>
+
+    <Grid Background="{StaticResource DarkBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="350"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Column - Machine -->
+        <StackPanel Grid.Column="0" Margin="10">
+            <!-- Rotor Configuration -->
+            <GroupBox Header="Rotor Settings (0-25)" Margin="0,0,0,15">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <!-- Rotor 1 (Fast) -->
+                    <Border Style="{StaticResource RotorBorderStyle}">
+                        <StackPanel>
+                            <Label Content="Rotor 1 (Fast)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                                <Button Style="{StaticResource RotorArrowButton}" Content="↑" Click="Rotor1Up_Click"
+                                        MouseWheel="Rotor_MouseWheel" Tag="1"/>
+                                <TextBox x:Name="txtRotor1Pos" Style="{StaticResource RotorPositionBox}" Text="0"
+                                         PreviewTextInput="RotorPosition_PreviewTextInput" Tag="1"
+                                         KeyDown="RotorPosition_KeyDown" LostFocus="RotorPosition_LostFocus"/>
+                                <Button Style="{StaticResource RotorArrowButton}" Content="↓" Click="Rotor1Down_Click"
+                                        MouseWheel="Rotor_MouseWheel" Tag="1"/>
+                            </StackPanel>
+                            <Label x:Name="lblRotor1Current" Content="Current: A" HorizontalAlignment="Center"
+                                   FontWeight="Bold"/>
+                            <TextBlock x:Name="txtRotor1Turnover" Text="(Turns at Z)" HorizontalAlignment="Center"
+                                      FontSize="11"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Rotor 2 (Medium) -->
+                    <Border Style="{StaticResource RotorBorderStyle}">
+                        <StackPanel>
+                            <Label Content="Rotor 2 (Medium)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                                <Button Style="{StaticResource RotorArrowButton}" Content="↑" Click="Rotor2Up_Click"
+                                        MouseWheel="Rotor_MouseWheel" Tag="2"/>
+                                <TextBox x:Name="txtRotor2Pos" Style="{StaticResource RotorPositionBox}" Text="0"
+                                         PreviewTextInput="RotorPosition_PreviewTextInput" Tag="2"
+                                         KeyDown="RotorPosition_KeyDown" LostFocus="RotorPosition_LostFocus"/>
+                                <Button Style="{StaticResource RotorArrowButton}" Content="↓" Click="Rotor2Down_Click"
+                                        MouseWheel="Rotor_MouseWheel" Tag="2"/>
+                            </StackPanel>
+                            <Label x:Name="lblRotor2Current" Content="Current: A" HorizontalAlignment="Center"
+                                   FontWeight="Bold"/>
+                            <TextBlock x:Name="txtRotor2Turnover" Text="(Turns at Z)" HorizontalAlignment="Center"
+                                      FontSize="11"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Rotor 3 (Slow) -->
+                    <Border Style="{StaticResource RotorBorderStyle}">
+                        <StackPanel>
+                            <Label Content="Rotor 3 (Slow)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                                <Button Style="{StaticResource RotorArrowButton}" Content="↑" Click="Rotor3Up_Click"
+                                        MouseWheel="Rotor_MouseWheel" Tag="3"/>
+                                <TextBox x:Name="txtRotor3Pos" Style="{StaticResource RotorPositionBox}" Text="0"
+                                         PreviewTextInput="RotorPosition_PreviewTextInput" Tag="3"
+                                         KeyDown="RotorPosition_KeyDown" LostFocus="RotorPosition_LostFocus"/>
+                                <Button Style="{StaticResource RotorArrowButton}" Content="↓" Click="Rotor3Down_Click"
+                                        MouseWheel="Rotor_MouseWheel" Tag="3"/>
+                            </StackPanel>
+                            <Label x:Name="lblRotor3Current" Content="Current: A" HorizontalAlignment="Center"
+                                   FontWeight="Bold"/>
+                            <TextBlock x:Name="txtRotor3Turnover" Text="(Turns at Z)" HorizontalAlignment="Center"
+                                      FontSize="11"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Plugboard -->
+            <GroupBox Header="Plugboard Connections" Margin="0,0,0,15">
+                <StackPanel>
+                    <ItemsControl x:Name="plugboardConnections" Margin="0,0,0,10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                    <Label Content="{Binding From}" Style="{StaticResource PlugboardPairLabel}"/>
+                                    <Label Content="↔" Margin="5,0" VerticalAlignment="Center"/>
+                                    <Label Content="{Binding To}" Style="{StaticResource PlugboardPairLabel}"/>
+                                    <Button Content="×" Click="RemovePlugboardPair_Click" Tag="{Binding}"
+                                            Style="{StaticResource PlugboardPairButton}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <ComboBox x:Name="cmbPlugboardFrom" Width="60" Height="30" Margin="0,0,5,0" Foreground="Black"/>
+                        <Label Content="↔" Margin="5,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <ComboBox x:Name="cmbPlugboardTo" Width="60" Height="30" Margin="5,0,5,0" Foreground="#FF010101"/>
+                        <Button Content="Add" Width="60" Height="30" Click="AddPlugboardPair_Click"
+                                Style="{StaticResource AddButtonStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Keyboard -->
+            <GroupBox Header="Keyboard" Margin="0,0,0,10">
+                <StackPanel x:Name="keyboardPanel">
+                    <!-- First Row -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                        <Button x:Name="btnQ" Content="Q" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnW" Content="W" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnE" Content="E" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnR" Content="R" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnT" Content="T" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnZ" Content="Z" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnU" Content="U" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnI" Content="I" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                    </StackPanel>
+
+                    <!-- Second Row -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                        <Button x:Name="btnA" Content="A" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnS" Content="S" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnD" Content="D" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnF" Content="F" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnG" Content="G" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnH" Content="H" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnJ" Content="J" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnK" Content="K" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                    </StackPanel>
+
+                    <!-- Third Row -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                        <Button x:Name="btnP" Content="P" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnY" Content="Y" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnX" Content="X" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnC" Content="C" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnV" Content="V" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnB" Content="B" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnN" Content="N" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnM" Content="M" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                        <Button x:Name="btnL" Content="L" Style="{StaticResource KeyButtonStyle}" Click="KeyButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Lightboard -->
+            <GroupBox Header="Lightboard">
+                <StackPanel x:Name="lightboardPanel">
+                    <!-- First Row -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                        <Label x:Name="lblLightQ" Content="Q" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightW" Content="W" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightE" Content="E" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightR" Content="R" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightT" Content="T" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightZ" Content="Z" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightU" Content="U" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightI" Content="I" Style="{StaticResource LightLabelStyle}"/>
+                    </StackPanel>
+
+                    <!-- Second Row -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                        <Label x:Name="lblLightA" Content="A" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightS" Content="S" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightD" Content="D" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightF" Content="F" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightG" Content="G" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightH" Content="H" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightJ" Content="J" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightK" Content="K" Style="{StaticResource LightLabelStyle}"/>
+                    </StackPanel>
+
+                    <!-- Third Row -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                        <Label x:Name="lblLightP" Content="P" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightY" Content="Y" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightX" Content="X" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightC" Content="C" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightV" Content="V" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightB" Content="B" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightN" Content="N" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightM" Content="M" Style="{StaticResource LightLabelStyle}"/>
+                        <Label x:Name="lblLightL" Content="L" Style="{StaticResource LightLabelStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- Right Column - Results -->
+        <Grid Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Settings -->
+            <GroupBox Grid.Row="0" Header="Machine Settings" Margin="0,0,0,10">
+                <StackPanel>
+                    <CheckBox x:Name="chkRotorOn" Content="Rotor Enabled" IsChecked="True" Margin="5"/>
+                    <Button x:Name="btnReset" Content="Reset All" Margin="5" Click="btnReset_Click"
+                            Style="{StaticResource ResetButtonStyle}" Width="82"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Input Message -->
+            <GroupBox Grid.Row="1" Header="Input Message" Margin="0,0,0,10">
+                <TextBox x:Name="txtInput" Style="{StaticResource MessageBoxStyle}"/>
+            </GroupBox>
+
+            <!-- Encrypted Message -->
+            <GroupBox Grid.Row="2" Header="Encrypted Message" Margin="0,0,0,10">
+                <TextBox x:Name="txtEncrypted" Style="{StaticResource MessageBoxStyle}"/>
+            </GroupBox>
+
+            <!-- Mirrored Message -->
+            <GroupBox Grid.Row="3" Header="Mirrored Message (for verification)">
+                <TextBox x:Name="txtMirrored" Style="{StaticResource MessageBoxStyle}"/>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
