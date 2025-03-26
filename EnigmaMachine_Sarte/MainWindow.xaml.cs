@@ -9,23 +9,22 @@ namespace EnigmaMachine_Sarte
 {
     public partial class MainWindow : Window
     {
-        // Constants for rotor wiring and reflector
-        string _control = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Standard alphabet for reference
-        string _ring1 = "DMTWSILRUYQNKFEJCAZBPGXOHV"; // Rotor 1 wiring (Hours)
-        string _ring2 = "HQZGPJTMOBLNCIFDYAWVEUSRKX"; // Rotor 2 wiring (Minutes)
-        string _ring3 = "UQNTLSZFMREHDPXKIBVYGJCWOA"; // Rotor 3 wiring (Seconds)
-        string _reflector = "YRUHQSLDPXNGOKMIEBFZCWVJAT"; // Reflector wiring
+        
+        string _control = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        string _ring1 = "DMTWSILRUYQNKFEJCAZBPGXOHV";
+        string _ring2 = "HQZGPJTMOBLNCIFDYAWVEUSRKX"; 
+        string _ring3 = "UQNTLSZFMREHDPXKIBVYGJCWOA"; 
+        string _reflector = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
 
-        // Rotor offset tracking
-        int[] _keyOffset = { 0, 0, 0 }; // Current rotor offsets (H, M, S)
-        int[] _initOffset = { 0, 0, 0 }; // Initial rotor offsets (H, M, S)
+       
+        int[] _keyOffset = { 0, 0, 0 }; 
+        int[] _initOffset = { 0, 0, 0 };
 
-        // Rotor state flag
+       
         bool _rotor = false;
 
-        // Plugboard setup
-        Dictionary<char, char> _plugboard = new Dictionary<char, char>(); // Plugboard dictionary
-        private bool _plugboardSet = false; // Flag to indicate if plugboard is set
+        Dictionary<char, char> _plugboard = new Dictionary<char, char>();
+        private bool _plugboardSet = false; 
 
         public MainWindow()
         {
@@ -34,7 +33,7 @@ namespace EnigmaMachine_Sarte
             SetDefaults();
             _rotor = false;
             chkRotorOn.IsChecked = false;
-            chkRotorOn.IsEnabled = true; // Disable rotor checkbox until plugboard is set
+            chkRotorOn.IsEnabled = true;
         }
 
         private void InitializePlugboardComboBoxes()
@@ -62,11 +61,11 @@ namespace EnigmaMachine_Sarte
             }
             else
             {
-                // Add existing connections (avoiding duplicates)
+            
                 var addedPairs = new HashSet<string>();
                 foreach (var pair in _plugboard)
                 {
-                    if (pair.Key < pair.Value) // To avoid duplicate displays (A-B vs B-A)
+                    if (pair.Key < pair.Value)
                     {
                         plugboardConnections.Items.Add(new PlugboardPair
                         {
@@ -135,7 +134,7 @@ namespace EnigmaMachine_Sarte
                 char mirroredChar = Mirror(inputChar);
                 txtMirrored.Text += mirroredChar;
 
-                // Highlight the pressed key and corresponding light
+           
                 HighlightKey(inputChar);
                 HighlightLight(encryptedChar);
 
@@ -244,20 +243,16 @@ namespace EnigmaMachine_Sarte
                     newChar = _plugboard.FirstOrDefault(x => x.Value == newChar).Key;
             }
 
-            // Rotor pass forward
             newChar = _ring1[IndexSearch(_control, newChar)];
             newChar = _ring2[IndexSearch(_control, newChar)];
             newChar = _ring3[IndexSearch(_control, newChar)];
 
-            // Reflector pass
             newChar = _reflector[IndexSearch(_control, newChar)];
 
-            // Rotor pass backward
             newChar = _ring3[IndexSearch(_control, newChar)];
             newChar = _ring2[IndexSearch(_control, newChar)];
             newChar = _ring1[IndexSearch(_control, newChar)];
 
-            // Plugboard pass (after rotors) - only if plugboard has connections
             if (_plugboard.Count > 0)
             {
                 if (_plugboard.ContainsKey(newChar))
@@ -406,7 +401,7 @@ namespace EnigmaMachine_Sarte
         //REVISED WHERE FIRST MOTOR MOVES
         private void Rotate(bool forward)
         {
-            if (!_rotor) return; // Only rotate if rotor is enabled
+            if (!_rotor) return; 
 
             if (forward)
             {
@@ -415,24 +410,23 @@ namespace EnigmaMachine_Sarte
                 _ring1 = MoveValues(true, _ring1);
 
               
-                if (_keyOffset[0] == 25) // Notch position for Rotor 1
+                if (_keyOffset[0] == 25) 
                 {
-                    // Rotate the medium rotor (Rotor 2)
+                   
                     _keyOffset[1] = (_keyOffset[1] + 1) % _control.Length;
                     _ring2 = MoveValues(true, _ring2);
 
-                    // Check if Rotor 2 is also at its notch position
-                    if (_keyOffset[1] == 25) // Notch position for Rotor 2
+                    if (_keyOffset[1] == 25) 
                     {
-                        // Rotate the slow rotor (Rotor 3)
+                      
                         _keyOffset[2] = (_keyOffset[2] + 1) % _control.Length;
                         _ring3 = MoveValues(true, _ring3);
                     }
                 }
-                // Special case for double-stepping (when medium rotor is at notch position)
-                else if (_keyOffset[1] == 25) // If medium rotor is at notch position
+          
+                else if (_keyOffset[1] == 25)
                 {
-                    // Rotate both medium and slow rotors
+                 
                     _keyOffset[1] = (_keyOffset[1] + 1) % _control.Length;
                     _ring2 = MoveValues(true, _ring2);
 
@@ -440,15 +434,15 @@ namespace EnigmaMachine_Sarte
                     _ring3 = MoveValues(true, _ring3);
                 }
             }
-            else // Rotating backward (for backspace)
+            else
             {
-                // First check if we're at position 0 for each rotor
+               
                 if (_keyOffset[0] == 0)
                 {
-                    _keyOffset[0] = _control.Length - 1; // Wrap around to 25
+                    _keyOffset[0] = _control.Length - 1; 
                     _ring1 = MoveValues(false, _ring1);
 
-                    // Check if we're moving past the notch position (25 → 24)
+                    
                     if (_keyOffset[1] == 0)
                     {
                         _keyOffset[1] = _control.Length - 1;
@@ -485,12 +479,12 @@ namespace EnigmaMachine_Sarte
         {
             if (forward)
             {
-                // Rotate right (move first character to end)
+            
                 return ring.Substring(1) + ring[0];
             }
             else
             {
-                // Rotate left (move last character to start)
+             
                 return ring[ring.Length - 1] + ring.Substring(0, ring.Length - 1);
             }
         }
@@ -669,16 +663,15 @@ namespace EnigmaMachine_Sarte
             _plugboardSet = true;
             chkRotorOn.IsEnabled = true;
 
-            // Update plugboard display
+           
             plugboardConnections.Items.Add(new PlugboardPair { From = fromChar, To = toChar });
 
-            // Remove the paired letters from the combo boxes
+        
             cmbPlugboardFrom.Items.Remove(fromChar.ToString());
             cmbPlugboardFrom.Items.Remove(toChar.ToString());
             cmbPlugboardTo.Items.Remove(fromChar.ToString());
             cmbPlugboardTo.Items.Remove(toChar.ToString());
 
-            // Select the first available items if possible
             if (cmbPlugboardFrom.Items.Count > 0)
                 cmbPlugboardFrom.SelectedIndex = 0;
             if (cmbPlugboardTo.Items.Count > 0)
@@ -693,28 +686,24 @@ namespace EnigmaMachine_Sarte
                 _plugboard.Remove(pair.From);
                 _plugboard.Remove(pair.To);
 
-                // Add the letters back to the combo boxes
+              
                 cmbPlugboardFrom.Items.Add(pair.From.ToString());
                 cmbPlugboardFrom.Items.Add(pair.To.ToString());
                 cmbPlugboardTo.Items.Add(pair.From.ToString());
                 cmbPlugboardTo.Items.Add(pair.To.ToString());
 
-                // Sort the combo boxes
                 cmbPlugboardFrom.Items.SortDescriptions.Add(
                     new System.ComponentModel.SortDescription("", System.ComponentModel.ListSortDirection.Ascending));
                 cmbPlugboardTo.Items.SortDescriptions.Add(
                     new System.ComponentModel.SortDescription("", System.ComponentModel.ListSortDirection.Ascending));
 
-                // Remove from display
                 plugboardConnections.Items.Remove(pair);
 
-                // Select the first available items if possible
                 if (cmbPlugboardFrom.Items.Count > 0)
                     cmbPlugboardFrom.SelectedIndex = 0;
                 if (cmbPlugboardTo.Items.Count > 0)
                     cmbPlugboardTo.SelectedIndex = 0;
 
-                // Update plugboard status
                 if (_plugboard.Count == 0)
                 {
                     _plugboardSet = false;
@@ -734,11 +723,10 @@ namespace EnigmaMachine_Sarte
             chkRotorOn.IsEnabled = true;
             _rotor = false;
 
-            // Clear and reinitialize the plugboard UI
+     
             plugboardConnections.Items.Clear();
             InitializePlugboardComboBoxes();
 
-            // Add the "no connections" display if needed
             if (plugboardConnections.Items.Count == 0)
             {
                 plugboardConnections.Items.Add(new PlugboardPair { From = '-', To = '-' });
